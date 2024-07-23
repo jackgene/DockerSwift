@@ -2,6 +2,71 @@ import Foundation
 
 // MARK: - SystemInformationResponse
 public struct SystemInformation: Codable {
+    public init(id: String, containers: UInt, containersRunning: UInt, containersPaused: UInt, containersStopped: UInt, images: UInt, storageDriver: String, storageDriverStatus: [[String]], dockerRootDir: String, plugins: Plugins? = nil, memoryLimit: Bool, swapLimit: Bool, kernelMemoryTCP: Bool? = nil, cpuCfsPeriod: Bool, cpuCfsQuota: Bool, cpuShares: Bool, cpuSet: Bool, pidsLimit: Bool, oomKillDisable: Bool, iPv4Forwarding: Bool, bridgeNfIptables: Bool, bridgeNfIp6Tables: Bool, debug: Bool, nFD: UInt, nGoroutines: UInt, systemTime: Date, loggingDriver: String, cgroupDriver: CgroupDriver, cgroupVersion: String, nEventsListener: Int, kernelVersion: String, operatingSystem: String, osVersion: String, osType: OsType, architecture: Architecture, ncpu: UInt16, memTotal: UInt64, indexServerAddress: String, registryConfig: RegistryConfig, genericResources: [GenericResource]? = nil, httpProxy: String, httpsProxy: String, noProxy: String, name: String, labels: [String], experimentalBuild: Bool, serverVersion: String, runtimes: Runtimes? = nil, defaultRuntime: String, swarm: SwarmInfo? = nil, liveRestoreEnabled: Bool, isolation: Isolation = .default, initBinary: String, containerdCommit: SystemInformation.Commit, runcCommit: SystemInformation.Commit, initCommit: SystemInformation.Commit, securityOptions: [String], productLicense: String? = nil, defaultAddressPools: [SystemInformation.DefaultAddressPool]? = nil, warnings: [String]? = nil, cdiSpecDirs: [String] = [], containerd: ContainerdInfo) {
+        self.id = id
+        self.containers = containers
+        self.containersRunning = containersRunning
+        self.containersPaused = containersPaused
+        self.containersStopped = containersStopped
+        self.images = images
+        self.storageDriver = storageDriver
+        self.storageDriverStatus = storageDriverStatus
+        self.dockerRootDir = dockerRootDir
+        self.plugins = plugins
+        self.memoryLimit = memoryLimit
+        self.swapLimit = swapLimit
+        self.kernelMemoryTCP = kernelMemoryTCP
+        self.cpuCfsPeriod = cpuCfsPeriod
+        self.cpuCfsQuota = cpuCfsQuota
+        self.cpuShares = cpuShares
+        self.cpuSet = cpuSet
+        self.pidsLimit = pidsLimit
+        self.oomKillDisable = oomKillDisable
+        self.iPv4Forwarding = iPv4Forwarding
+        self.bridgeNfIptables = bridgeNfIptables
+        self.bridgeNfIp6Tables = bridgeNfIp6Tables
+        self.debug = debug
+        self.nFD = nFD
+        self.nGoroutines = nGoroutines
+        self.systemTime = systemTime
+        self.loggingDriver = loggingDriver
+        self.cgroupDriver = cgroupDriver
+        self.cgroupVersion = cgroupVersion
+        self.nEventsListener = nEventsListener
+        self.kernelVersion = kernelVersion
+        self.operatingSystem = operatingSystem
+        self.osVersion = osVersion
+        self.osType = osType
+        self.architecture = architecture
+        self.ncpu = ncpu
+        self.memTotal = memTotal
+        self.indexServerAddress = indexServerAddress
+        self.registryConfig = registryConfig
+        self.genericResources = genericResources
+        self.httpProxy = httpProxy
+        self.httpsProxy = httpsProxy
+        self.noProxy = noProxy
+        self.name = name
+        self.labels = labels
+        self.experimentalBuild = experimentalBuild
+        self.serverVersion = serverVersion
+        self.runtimes = runtimes
+        self.defaultRuntime = defaultRuntime
+        self.swarm = swarm
+        self.liveRestoreEnabled = liveRestoreEnabled
+        self.isolation = isolation
+        self.initBinary = initBinary
+        self.containerdCommit = containerdCommit
+        self.runcCommit = runcCommit
+        self.initCommit = initCommit
+        self.securityOptions = securityOptions
+        self.productLicense = productLicense
+        self.defaultAddressPools = defaultAddressPools
+        self.warnings = warnings
+        self.cdiSpecDirs = cdiSpecDirs
+        self.containerd = containerd
+    }
+    
     /// Unique identifier of the daemon.
     public let id: String
     
@@ -39,12 +104,8 @@ public struct SystemInformation: Codable {
     /// Indicates if the host has memory swap limit support enabled.
     public let swapLimit: Bool
     
-    /// Indicates if the host has kernel memory limit support enabled.
-    @available(*, deprecated, message: "This field is deprecated as the kernel 5.4 deprecated `kmem.limit_in_bytes`")
-    public let kernelMemory: Bool?
-    
     /// Indicates if the host has kernel memory TCP limit support enabled.
-    /// Kernel memory TCP limits are not supported when using cgroups v2, which does not support the corresponding memory.kmem.tcp.limit_in_bytes cgroup.
+    /// Kernel memory TCP limits are not supported when using cgroups v2, which does not support the corresponding `memory.kmem.tcp.limit_in_bytes` cgroup.
     public let kernelMemoryTCP: Bool?
     
     /// Indicates if CPU CFS (Completely Fair Scheduler) period is supported by the host.
@@ -56,7 +117,7 @@ public struct SystemInformation: Codable {
     /// Indicates if CPU Shares limiting is supported by the host.
     public let cpuShares: Bool
     
-    /// Indicates if CPUsets (cpuset.cpus, cpuset.mems) are supported by the host.
+    /// Indicates if CPUsets (`cpuset.cpus`, `cpuset.mems`) are supported by the host.
     public let cpuSet: Bool
     
     /// Indicates if the host kernel has PID limit support enabled.
@@ -70,6 +131,8 @@ public struct SystemInformation: Codable {
     
     /// Indicates if `bridge-nf-call-iptables` is available on the host.
     public let bridgeNfIptables: Bool
+    
+    /// Indicates if `bridge-nf-call-ip6tables` is available on the host.
     public let bridgeNfIp6Tables: Bool
     
     /// Indicates if the daemon is running in debug-mode / with debug-level logging enabled.
@@ -91,16 +154,18 @@ public struct SystemInformation: Codable {
     
     /// The cgroup driver the daemon is using; cgroupfs or systemd.
     /// Returns `none` when the daemon is running in rootless mode
-    public let cgroupDriver: String
+    public let cgroupDriver: CgroupDriver
     
     /// The cgroup version
     public let cgroupVersion: String
     
     public let nEventsListener: Int
-    public let kernelVersion, operatingSystem, osVersion, osType: String
+    public let kernelVersion, operatingSystem, osVersion: String
+    
+    public let osType: OsType
     
     /// Hardware architecture of the host, as returned by the Go runtime (GOARCH).
-    public let architecture: String
+    public let architecture: Architecture
     
     /// The number of logical CPUs usable by the daemon.
     public let ncpu: UInt16
@@ -140,18 +205,6 @@ public struct SystemInformation: Codable {
     /// Version string of the daemon.
     public let serverVersion: String
     
-    /// URL of the distributed storage backend.
-    /// Deprecated: This field is only propagated when using standalone Swarm mode, and overlay networking using an external k/v store.
-    /// Overlay networks with Swarm mode enabled use the built-in raft store, and this field will be empty.
-    @available(*, deprecated, message: "This field was only propagated when using standalone Swarm mode")
-    public let clusterStore: String?
-    
-    /// The network endpoint that the Engine advertises for the purpose of node discovery. `clusterAdvertise` is a host:port combination on which the daemon is reachable by other hosts.
-    /// Deprecated: This field is only propagated when using standalone Swarm mode, and overlay networking using an external k/v store.
-    /// Overlay networks with Swarm mode enabled use the built-in raft store, and this field will be empty.
-    @available(*, deprecated, message: "This field was only propagated when using standalone Swarm mode")
-    public let clusterAdvertise: String?
-    
     public let runtimes: Runtimes?
     
     /// Name of the default OCI runtime that is used when starting containers.
@@ -166,7 +219,7 @@ public struct SystemInformation: Codable {
     
     /// Represents the isolation technology to use as a default for containers. The supported values are platform-specific.
     /// Valid values: "default" "hyperv" "process"
-    public let isolation: String
+    public let isolation: Isolation
 
     /// Name and optional, path of the `docker-init` binary.
     public let initBinary: String
@@ -187,6 +240,10 @@ public struct SystemInformation: Codable {
     /// List of warnings / informational messages about missing features, or issues related to the daemon configuration.
     public let warnings: [String]?
     
+    public let cdiSpecDirs: [String]
+    
+    public let containerd: ContainerdInfo
+    
     enum CodingKeys: String, CodingKey {
         case id = "ID"
         case containers = "Containers"
@@ -200,7 +257,6 @@ public struct SystemInformation: Codable {
         case plugins = "Plugins"
         case memoryLimit = "MemoryLimit"
         case swapLimit = "SwapLimit"
-        case kernelMemory = "KernelMemory"
         case kernelMemoryTCP = "KernelMemoryTCP"
         case cpuCfsPeriod = "CpuCfsPeriod"
         case cpuCfsQuota = "CpuCfsQuota"
@@ -236,8 +292,6 @@ public struct SystemInformation: Codable {
         case labels = "Labels"
         case experimentalBuild = "ExperimentalBuild"
         case serverVersion = "ServerVersion"
-        case clusterStore = "ClusterStore"
-        case clusterAdvertise = "ClusterAdvertise"
         case runtimes = "Runtimes"
         case defaultRuntime = "DefaultRuntime"
         case swarm = "Swarm"
@@ -251,10 +305,17 @@ public struct SystemInformation: Codable {
         case productLicense = "ProductLicense"
         case defaultAddressPools = "DefaultAddressPools"
         case warnings = "Warnings"
+        case cdiSpecDirs = "CDISpecDirs"
+        case containerd = "Containerd"
     }
     
     // MARK: - Commit
     public struct Commit: Codable {
+        public init(id: String, expected: String) {
+            self.id = id
+            self.expected = expected
+        }
+        
         public let id, expected: String
         
         enum CodingKeys: String, CodingKey {
@@ -265,12 +326,60 @@ public struct SystemInformation: Codable {
     
     // MARK: - DefaultAddressPool
     public struct DefaultAddressPool: Codable {
+        public init(base: String, size: String) {
+            self.base = base
+            self.size = size
+        }
+        
         let base, size: String
         
         enum CodingKeys: String, CodingKey {
             case base = "Base"
             case size = "Size"
         }
+    }
+    
+    public enum Architecture: String, Codable {
+        case ppc64
+        case ppc64le
+        case x86 = "386"
+        case amd64
+        case arm
+        case arm64
+        case wasm
+        case loong64
+        case mips
+        case mipsle
+        case mips64
+        case mips64le
+        case riscv64
+        case s390x
+    }
+    
+    public enum OsType: String, Codable {
+        case aix
+        case android
+        case darwin
+        case dragonfly
+        case freebsd
+        case illumos
+        case ios
+        case js
+        case linux
+        case netbsd
+        case openbsd
+        case plan9
+        case solaris
+        case wasip1
+        case windows
+    }
+    
+    public enum Isolation: String, Codable {
+        case `default`, hyperv, process
+    }
+    
+    public enum CgroupDriver: String, Codable {
+        case cgroupfs, systemd, none
     }
 }
 
@@ -310,6 +419,13 @@ public struct NamedResourceSpec: Codable {
 
 // MARK: - Plugins
 public struct Plugins: Codable {
+    public init(volume: [String]? = nil, network: [String]? = nil, authorization: [String]? = nil, log: [String]? = nil) {
+        self.volume = volume
+        self.network = network
+        self.authorization = authorization
+        self.log = log
+    }
+    
     public let volume, network, authorization, log: [String]?
     
     enum CodingKeys: String, CodingKey {
@@ -322,6 +438,14 @@ public struct Plugins: Codable {
 
 // MARK: - RegistryConfig
 public struct RegistryConfig: Codable {
+    public init(allowNondistributableArtifactsCIDRs: [String]? = nil, allowNondistributableArtifactsHostnames: [String]? = nil, insecureRegistryCIDRs: [String], indexConfigs: [String : IndexConfig], mirrors: [String]? = nil) {
+        self.allowNondistributableArtifactsCIDRs = allowNondistributableArtifactsCIDRs
+        self.allowNondistributableArtifactsHostnames = allowNondistributableArtifactsHostnames
+        self.insecureRegistryCIDRs = insecureRegistryCIDRs
+        self.indexConfigs = indexConfigs
+        self.mirrors = mirrors
+    }
+    
     public let allowNondistributableArtifactsCIDRs: [String]?
     public let allowNondistributableArtifactsHostnames: [String]?
     public let insecureRegistryCIDRs: [String]
@@ -353,6 +477,12 @@ public struct IndexConfig: Codable {
 
 // MARK: - Runtimes
 public struct Runtimes: Codable {
+    public init(runc: Runtimes.Runc? = nil, runcMaster: Runtimes.Runc? = nil, custom: Runtimes.Custom? = nil) {
+        self.runc = runc
+        self.runcMaster = runcMaster
+        self.custom = custom
+    }
+    
     public let runc, runcMaster: Runc?
     public let custom: Custom?
     
@@ -364,6 +494,11 @@ public struct Runtimes: Codable {
     
     // MARK: - Custom
     public struct Custom: Codable {
+        public init(path: String, runtimeArgs: [String]) {
+            self.path = path
+            self.runtimeArgs = runtimeArgs
+        }
+        
         public let path: String
         public let runtimeArgs: [String]
     }
@@ -376,6 +511,18 @@ public struct Runtimes: Codable {
 
 // MARK: - Swarm
 public struct SwarmInfo: Codable {
+    public init(nodeID: String, nodeAddr: String, localNodeState: String, controlAvailable: Bool, error: String, remoteManagers: [SwarmInfo.RemoteManager]? = nil, nodes: Int? = nil, managers: Int? = nil, cluster: SwarmInfo.ClusterInfo? = nil) {
+        self.nodeID = nodeID
+        self.nodeAddr = nodeAddr
+        self.localNodeState = localNodeState
+        self.controlAvailable = controlAvailable
+        self.error = error
+        self.remoteManagers = remoteManagers
+        self.nodes = nodes
+        self.managers = managers
+        self.cluster = cluster
+    }
+    
     public let nodeID, nodeAddr, localNodeState: String
     public let controlAvailable: Bool
     public let error: String
@@ -451,4 +598,24 @@ public struct SwarmTLSInfo: Codable {
         case certIssuerSubject = "CertIssuerSubject"
         case certIssuerPublicKey = "CertIssuerPublicKey"
     }
+}
+
+public struct ContainerdInfo: Codable {
+    public init(address: String, namespaces: ContainerdInfo.Namespaces) {
+        self.address = address
+        self.namespaces = namespaces
     }
+    
+    public let address: String
+    public let namespaces: Namespaces
+    
+    public struct Namespaces: Codable {
+        public init(Containers: String, Plugins: String) {
+            self.Containers = Containers
+            self.Plugins = Plugins
+        }
+        
+        public let Containers: String
+        public let Plugins: String
+    }
+}
