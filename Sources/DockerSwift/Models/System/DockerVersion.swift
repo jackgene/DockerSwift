@@ -2,6 +2,21 @@ import Foundation
 import BetterCodable
 
 public struct DockerVersion: Codable {
+    public init(platform: DockerPlatform, components: [DockerVersionComponent], version: String, apiVersion: String, minAPIVersion: String, gitCommit: String, goVersion: String, os: SystemInformation.OsType, arch: SystemInformation.Architecture, kernelVersion: String? = nil, buildTime: Date, experimental: Bool? = nil) {
+        self.platform = platform
+        self.components = components
+        self.version = version
+        self.apiVersion = apiVersion
+        self.minAPIVersion = minAPIVersion
+        self.gitCommit = gitCommit
+        self.goVersion = goVersion
+        self.os = os
+        self.arch = arch
+        self.kernelVersion = kernelVersion
+        self.buildTime = buildTime
+        self.experimental = experimental
+    }
+    
     
     public let platform: DockerPlatform
     
@@ -24,10 +39,10 @@ public struct DockerVersion: Codable {
     public let goVersion: String
     
     /// The operating system that the daemon is running on ("linux" or "windows")
-    public let os: String
+    public let os: SystemInformation.OsType
     
     /// The CPU  architecture that the daemon is running on
-    public let arch: String
+    public let arch: SystemInformation.Architecture
     
     /// The kernel version (uname -r) that the daemon is running on.
     public let kernelVersion: String?
@@ -58,6 +73,12 @@ public struct DockerVersion: Codable {
 
 // MARK: - Component
 public struct DockerVersionComponent: Codable {
+    public init(name: String, version: String, details: DockerVersionComponentDetails? = nil) {
+        self.name = name
+        self.version = version
+        self.details = details
+    }
+    
     public let name, version: String
     public let details: DockerVersionComponentDetails?
     
@@ -79,7 +100,9 @@ public struct DockerVersionComponentDetails: Codable {
     public let buildTime: String?
     
     public let gitCommit: String?
-    public let goVersion, kernelVersion, minAPIVersion, os: String?
+    public let goVersion, kernelVersion, minAPIVersion: String?
+    
+    public let os: SystemInformation.OsType
     
     enum CodingKeys: String, CodingKey {
         case apiVersion = "ApiVersion"
@@ -96,6 +119,10 @@ public struct DockerVersionComponentDetails: Codable {
 
 // MARK: - Platform
 public struct DockerPlatform: Codable {
+    public init(name: String) {
+        self.name = name
+    }
+    
     public let name: String
     
     enum CodingKeys: String, CodingKey {

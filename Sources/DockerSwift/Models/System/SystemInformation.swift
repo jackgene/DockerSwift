@@ -524,6 +524,7 @@ public struct SwarmInfo: Codable {
     }
     
     public let nodeID, nodeAddr, localNodeState: String
+    /// Whether the current node is a manager.
     public let controlAvailable: Bool
     public let error: String
     public let remoteManagers: [RemoteManager]?
@@ -544,6 +545,19 @@ public struct SwarmInfo: Codable {
     
     // MARK: - ClusterInfo
     public struct ClusterInfo: Codable {
+        public init(id: String, version: SwarmVersion, createdAt: Date, updatedAt: Date, spec: SwarmSpec, tlsInfo: SwarmTLSInfo, rootRotationInProgress: Bool, dataPathPort: Int, defaultAddrPool: [String]? = nil, subnetSize: Int) {
+            self.id = id
+            self.version = version
+            self.createdAt = createdAt
+            self.updatedAt = updatedAt
+            self.spec = spec
+            self.tlsInfo = tlsInfo
+            self.rootRotationInProgress = rootRotationInProgress
+            self.dataPathPort = dataPathPort
+            self.defaultAddrPool = defaultAddrPool
+            self.subnetSize = subnetSize
+        }
+        
         public let id: String
         public let version: SwarmVersion
         public let createdAt, updatedAt: Date
@@ -571,6 +585,11 @@ public struct SwarmInfo: Codable {
     
     // MARK: - RemoteManager
     public struct RemoteManager: Codable {
+        public init(nodeID: String, addr: String) {
+            self.nodeID = nodeID
+            self.addr = addr
+        }
+        
         public let nodeID, addr: String
         
         enum CodingKeys: String, CodingKey {
@@ -582,6 +601,10 @@ public struct SwarmInfo: Codable {
 
 // MARK: - SwarmVersion
 public struct SwarmVersion: Codable {
+    public init(index: UInt64) {
+        self.index = index
+    }
+    
     public let index: UInt64
     
     enum CodingKeys: String, CodingKey {
@@ -591,6 +614,12 @@ public struct SwarmVersion: Codable {
 
 // MARK: - SwarmTLSInfo
 public struct SwarmTLSInfo: Codable {
+    public init(trustRoot: String, certIssuerSubject: String, certIssuerPublicKey: String) {
+        self.trustRoot = trustRoot
+        self.certIssuerSubject = certIssuerSubject
+        self.certIssuerPublicKey = certIssuerPublicKey
+    }
+    
     public let trustRoot, certIssuerSubject, certIssuerPublicKey: String
     
     enum CodingKeys: String, CodingKey {
