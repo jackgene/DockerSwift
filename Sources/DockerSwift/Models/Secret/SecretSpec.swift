@@ -54,6 +54,6 @@ extension SecretSpec: Decodable {
         self.labels = try container.decode([String:String].self, forKey: .labels)
         self.driver = try container.decodeIfPresent(DriverConfig.self, forKey: .driver)
         self.templating = try container.decodeIfPresent(DriverConfig.self, forKey: .templating)
-        self.data = .init()
+        self.data = try container.decode(Data.self, forKey: .data)
     }
 }

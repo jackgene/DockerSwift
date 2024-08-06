@@ -2,14 +2,13 @@ import Foundation
 
 // MARK: - ServiceSpec
 public struct ServiceSpec: Codable {
-    public init(name: String, labels: [String : String] = [:], taskTemplate: ServiceSpec.TaskTemplate, mode: ServiceSpec.ServiceMode = .replicated(1), updateConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, rollbackConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, networks: [ServiceSpec.NetworkAttachmentConfig]? = nil, endpointSpec: ServiceEndpointSpec? = nil) {
+    public init(name: String, labels: [String : String] = [:], taskTemplate: ServiceSpec.TaskTemplate, mode: ServiceSpec.ServiceMode = .replicated(1), updateConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, rollbackConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, endpointSpec: ServiceEndpointSpec? = nil) {
         self.name = name
         self.labels = labels
         self.taskTemplate = taskTemplate
         self.mode = mode
         self.updateConfig = updateConfig
         self.rollbackConfig = rollbackConfig
-        self.networks = networks
         self.endpointSpec = endpointSpec
     }
     
@@ -29,9 +28,6 @@ public struct ServiceSpec: Codable {
     
     public var rollbackConfig: UpdateOrRollbackConfig?
     
-    /// Configuration for the networks this service belongs to.
-    public var networks: [NetworkAttachmentConfig]?
-    
     /// Configuration for the ports publshed by this service.
     public var endpointSpec: ServiceEndpointSpec?
     
@@ -42,7 +38,6 @@ public struct ServiceSpec: Codable {
         case mode = "Mode"
         case updateConfig = "UpdateConfig"
         case rollbackConfig = "RollbackConfig"
-        case networks = "Networks"
         case endpointSpec = "EndpointSpec"
     }
     

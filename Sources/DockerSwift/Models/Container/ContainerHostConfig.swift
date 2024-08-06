@@ -614,10 +614,10 @@ public struct ContainerHostConfig: Codable {
     // MARK: - Ulimit
     public struct Ulimit: Codable {
         public var name: String
-        public var soft: UInt64
-        public var hard: UInt64
+        public var soft: Int64
+        public var hard: Int64
         
-        public init(name: String, soft: UInt64, hard: UInt64) {
+        public init(name: String, soft: Int64, hard: Int64) {
             self.name = name
             self.soft = soft
             self.hard = hard
