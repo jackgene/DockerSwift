@@ -13,7 +13,7 @@ public struct ServiceSpec: Codable {
     }
     
     /// Name of the service.
-    public var name: String
+    public var name: String?
     
     /// User-defined key/value metadata.
     public var labels: [String:String] = [:]
@@ -31,7 +31,7 @@ public struct ServiceSpec: Codable {
     /// Configuration for the ports publshed by this service.
     public var endpointSpec: ServiceEndpointSpec?
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case name = "Name"
         case labels = "Labels"
         case taskTemplate = "TaskTemplate"
@@ -85,7 +85,7 @@ public struct ServiceSpec: Codable {
         /// If not present, the default one for the swarm will be used, finally falling back to the engine default if not specified.
         public var logDriver: DriverConfig?
         
-        enum CodingKeys: String, CodingKey {
+        public enum CodingKeys: String, CodingKey {
             case containerSpec = "ContainerSpec"
             case forceUpdate = "ForceUpdate"
             case runtime = "Runtime"
@@ -109,7 +109,7 @@ public struct ServiceSpec: Codable {
             public var limits: Limit? = nil
             public var reservations: ResourceObject? = nil
             
-            enum CodingKeys: String, CodingKey {
+            public enum CodingKeys: String, CodingKey {
                 case limits = "Limits"
                 case reservations = "Reservations"
             }
@@ -128,7 +128,7 @@ public struct ServiceSpec: Codable {
                 /// Limits the maximum number of PIDs in the container. Set 0 for unlimited.
                 public var pids: UInt64? = 0
                 
-                enum CodingKeys: String, CodingKey {
+                public enum CodingKeys: String, CodingKey {
                     case nanoCPUs = "NanoCPUs"
                     case memoryBytes = "MemoryBytes"
                     case pids = "Pids"
@@ -148,7 +148,7 @@ public struct ServiceSpec: Codable {
                 
                 public var genericResources: [GenericResource]? = []
                 
-                enum CodingKeys: String, CodingKey {
+                public enum CodingKeys: String, CodingKey {
                     case nanoCPUs = "NanoCPUs"
                     case memoryBytes = "MemoryBytes"
                     case genericResources = "GenericResources"
@@ -316,7 +316,7 @@ public struct ServiceSpec: Codable {
     
     // MARK: - ContainerSpec
     public struct ContainerSpec: Codable {
-        public init(image: String, isolation: String = "default", labels: [String : String]? = [:], command: [String]? = [], args: [String]? = [], hostname: String? = nil, env: [String]? = [], workDir: String? = nil, user: String? = nil, groups: [String]? = nil, privileges: ServiceSpec.ContainerSpec.Privileges? = nil, tty: Bool? = false, openStdin: Bool? = false, readOnly: Bool? = false, mounts: [ContainerHostConfig.ContainerMount]? = nil, stopSignal: UnixSignal? = .quit, stopGracePeriod: UInt64? = 0, healthCheck: ContainerConfig.HealthCheckConfig? = nil, dnsConfig: ServiceSpec.ContainerSpec.DNSConfig? = .init(), secrets: [ServiceSpec.ContainerSpec.Secret]? = [], configs: [ServiceSpec.ContainerSpec.Config]? = [], init: Bool? = nil, sysctls: [String : String]? = [:], capabilityAdd: [String]? = [], capabilityDrop: [String]? = [], ulimits: [ContainerHostConfig.Ulimit]? = []) {
+        public init(image: String, isolation: String = "default", labels: [String : String]? = [:], command: [String]? = [], args: [String]? = [], hostname: String? = nil, env: [String]? = [], workDir: String? = nil, user: String? = nil, groups: [String]? = nil, privileges: ServiceSpec.ContainerSpec.Privileges? = nil, tty: Bool? = false, openStdin: Bool? = false, readOnly: Bool? = false, mounts: [ContainerHostConfig.ContainerMount]? = nil, stopSignal: UnixSignal? = .quit, stopGracePeriod: UInt64? = 0, healthCheck: ContainerConfig.HealthCheckConfig? = nil, dnsConfig: ServiceSpec.ContainerSpec.DNSConfig? = .init(), secrets: [ServiceSpec.ContainerSpec.Secret]? = [], configs: [ServiceSpec.ContainerSpec.Config]? = [], networks: [NetworkAttachmentConfig]? = [], init: Bool? = nil, sysctls: [String : String]? = [:], capabilityAdd: [String]? = [], capabilityDrop: [String]? = [], ulimits: [ContainerHostConfig.Ulimit]? = []) {
             self.image = image
             self.isolation = isolation
             self.labels = labels
@@ -403,6 +403,8 @@ public struct ServiceSpec: Codable {
         
         public var configs: [Config]? = []
         
+        public var networks: [NetworkAttachmentConfig]? = []
+        
         /// Run an init inside the container that forwards signals and reaps processes.
         /// This field is omitted if empty, and the default (as configured on the daemon) is used.
         public var `init`: Bool? = nil
@@ -444,6 +446,7 @@ public struct ServiceSpec: Codable {
             case dnsConfig = "DNSConfig"
             case configs = "Configs"
             case secrets = "Secrets"
+            case networks = "Networks"
             case `init` = "Init"
             case sysctls = "Sysctls"
             case capabilityAdd = "CapabilityAdd"

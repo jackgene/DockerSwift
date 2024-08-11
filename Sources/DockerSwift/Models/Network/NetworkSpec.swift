@@ -55,6 +55,6 @@ public struct NetworkSpec: Codable {
         case ipam = "IPAM"
         case enableIPv6 = "EnableIPv6"
         case options = "Options"
-        case labels = "Labeels"
+        case labels = "Labels"
     }
 }

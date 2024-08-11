@@ -18,7 +18,7 @@ public struct SecretSpec: Encodable {
     /// Template driver configuration
     public var templating: DriverConfig?
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case name = "Name"
         case labels = "Labels"
         case data = "Data"
