@@ -32,6 +32,31 @@ public enum UnixSignal: String, Encodable {
     case stop       = "SIGSTOP"
     case tstp       = "SIGTSTP"
     
+    public var toInt: UInt8 {
+        return switch self {
+        case .hup : 1
+        case .int : 2
+        case .quit : 3
+        case .ill : 4
+        case .trap : 5
+        case .abort : 6
+        case .bus : 7
+        case .fpe : 8
+        case .kill : 9
+        case .usr1  : 10
+        case .segv  : 11
+        case .usr2  : 12
+        case .pipe  : 13
+        case .alarm : 14
+        case .term  : 15
+        case .stackFault : 16
+        case .child    : 17
+        case .cont     : 18
+        case .stop     : 19
+        case .tstp     : 20
+        }
+    }
+    
 }
 
 /// This normally shouldn't be needed as Docker is expected to return a Unix signal as a string value, but I need to use Podman and podman returns integer values.

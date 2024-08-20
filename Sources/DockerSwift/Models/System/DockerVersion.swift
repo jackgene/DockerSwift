@@ -2,7 +2,7 @@ import Foundation
 import BetterCodable
 
 public struct DockerVersion: Codable {
-    public init(platform: DockerPlatform, components: [DockerVersionComponent], version: String, apiVersion: String, minAPIVersion: String, gitCommit: String, goVersion: String, os: SystemInformation.OsType, arch: SystemInformation.Architecture, kernelVersion: String? = nil, buildTime: Date, experimental: Bool? = nil) {
+    public init(platform: DockerPlatform, components: [DockerVersionComponent], version: String, apiVersion: String, minAPIVersion: String, gitCommit: String, goVersion: String, os: OsType, arch: Architecture, kernelVersion: String? = nil, buildTime: Date, experimental: Bool? = nil) {
         self.platform = platform
         self.components = components
         self.version = version
@@ -39,10 +39,10 @@ public struct DockerVersion: Codable {
     public let goVersion: String
     
     /// The operating system that the daemon is running on ("linux" or "windows")
-    public let os: SystemInformation.OsType
+    public let os: OsType
     
     /// The CPU  architecture that the daemon is running on
-    public let arch: SystemInformation.Architecture
+    public let arch: Architecture
     
     /// The kernel version (uname -r) that the daemon is running on.
     public let kernelVersion: String?
@@ -102,7 +102,7 @@ public struct DockerVersionComponentDetails: Codable {
     public let gitCommit: String?
     public let goVersion, kernelVersion, minAPIVersion: String?
     
-    public let os: SystemInformation.OsType
+    public let os: OsType
     
     enum CodingKeys: String, CodingKey {
         case apiVersion = "ApiVersion"
