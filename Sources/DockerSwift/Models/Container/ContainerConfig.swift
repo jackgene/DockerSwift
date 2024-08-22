@@ -10,7 +10,7 @@ public struct ContainerConfig: Codable {
     /// Custom command to run, overrides the value of the Image if any
     public var command: [String]? = nil
     
-    public var domainname: String = ""
+    public var domainname: String?
     
     /// Custom entrypoint to run, overrides the value of the Image if any
     public var entrypoint: [String]? = nil
@@ -63,15 +63,15 @@ public struct ContainerConfig: Codable {
     public var tty: Bool = false
     
     /// The user that commands are run as inside the container.
-    public var user: String = ""
+    public var user: String? = nil
     
     /// An object mapping mount point paths inside the container to empty objects.
     public var volumes: [String:EmptyObject]? = [:]
     
     /// The working directory for commands to run in.
-    public var workingDir: String = ""
+    public var workingDir: String? = nil
     
-    public init(image: String, attachStdin: Bool = false, attachStdout: Bool = true, attachStderr: Bool = true, command: [String]? = nil, domainname: String = "", entrypoint: [String]? = nil, environmentVars: [String]? = nil, exposedPorts: [ExposedPortSpec]? = [], healthcheck: ContainerConfig.HealthCheckConfig? = nil, hostname: String = "", labels: [String : String]? = [:], macAddress: String? = nil, networkDisabled: Bool? = nil, onBuild: [String]? = nil, openStdin: Bool = false, shell: [String]? = nil, stdinOnce: Bool = false, stopSignal: UnixSignal? = nil, stopTimeout: UInt? = 10, tty: Bool = false, user: String = "", volumes: [String : ContainerConfig.EmptyObject]? = [:], workingDir: String = "") {
+    public init(image: String, attachStdin: Bool = false, attachStdout: Bool = true, attachStderr: Bool = true, command: [String]? = nil, domainname: String? = nil, entrypoint: [String]? = nil, environmentVars: [String]? = nil, exposedPorts: [ExposedPortSpec]? = [], healthcheck: ContainerConfig.HealthCheckConfig? = nil, hostname: String = "", labels: [String : String]? = [:], macAddress: String? = nil, networkDisabled: Bool? = nil, onBuild: [String]? = nil, openStdin: Bool = false, shell: [String]? = nil, stdinOnce: Bool = false, stopSignal: UnixSignal? = nil, stopTimeout: UInt? = 10, tty: Bool = false, user: String? = nil, volumes: [String : ContainerConfig.EmptyObject]? = [:], workingDir: String? = nil) {
         self.attachStdin = attachStdin
         self.attachStdout = attachStdout
         self.attachStderr = attachStderr
