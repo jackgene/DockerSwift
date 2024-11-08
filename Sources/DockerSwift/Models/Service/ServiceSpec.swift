@@ -191,14 +191,16 @@ public struct ServiceSpec: Codable {
         private(set) public var replicatedJob: ReplicatedJob? = nil
         
         /// Run a “one-off” job  globally which means each node in the cluster will run a task for this job
-        private(set) public var GlobalJob: GlobalJob? = nil
+        private(set) public var globalJob: GlobalJob? = nil
         
         /// A service with one task per node that run until reaching a completed state.
-        private(set) public var Global: Global? = nil
+        private(set) public var global: Global? = nil
         
         enum CodingKeys: String, CodingKey {
             case replicated = "Replicated"
             case replicatedJob = "ReplicatedJob"
+            case globalJob = "GlobalJob"
+            case global = "Global"
         }
         
         public struct Replicated: Codable {
@@ -425,7 +427,7 @@ public struct ServiceSpec: Codable {
         public var ulimits: [ContainerHostConfig.Ulimit]? = []
         
         
-        enum CodingKeys: String, CodingKey {
+        public enum CodingKeys: String, CodingKey {
             case image = "Image"
             case isolation = "Isolation"
             case labels = "Labels"
