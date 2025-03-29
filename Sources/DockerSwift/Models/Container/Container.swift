@@ -269,8 +269,8 @@ public struct Container: Codable {
         /// Prefix length of the IPv6 unicast address.
         public let linkLocalIPv6PrefixLen: UInt16
         
-        // TODO: implement
-        // public let ports:
+        // Mapping from container port to host ports
+        public let ports: [String: [PortBinding]?]
         
         /// ID of the network sandbox
         public let sandboxKey: String
@@ -287,6 +287,7 @@ public struct Container: Codable {
             case hairpinMode = "HairpinMode"
             case linkLocalIPv6Address = "LinkLocalIPv6Address"
             case linkLocalIPv6PrefixLen = "LinkLocalIPv6PrefixLen"
+            case ports = "Ports"
             case sandboxKey = "SandboxKey"
             case secondaryIPAddresses = "SecondaryIPAddresses"
             case secondaryIPv6Addresses = "SecondaryIPv6Addresses"
@@ -302,5 +303,16 @@ public struct Container: Codable {
                 case prefixLength = "PrefixLen"
             }
         }
+        
+        public struct PortBinding: Codable {
+            public let hostIp: String
+            public let hostPort: String
+            
+            enum CodingKeys: String, CodingKey {
+                case hostIp = "HostIp"
+                case hostPort = "HostPort"
+            }
+        }
+
     }
 }
