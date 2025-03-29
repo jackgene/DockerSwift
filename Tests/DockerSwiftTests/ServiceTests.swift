@@ -83,7 +83,6 @@ final class ServiceTests: XCTestCase {
                 restartPolicy: .init(condition: .any, delay: .seconds(2), maxAttempts: 2)
             ),
             mode: .replicated(1),
-            networks: [.init(target: network.id)],
             endpointSpec: .init(ports: [.init(name: "HTTP", targetPort: 80, publishedPort: 8000)])
         )
         do {
