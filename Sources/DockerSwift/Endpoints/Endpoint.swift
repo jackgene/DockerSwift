@@ -48,9 +48,9 @@ class JSONStreamingEndpoint<T>: StreamingEndpoint where T: Codable {
         self.method = method
     }
     
-    private (set) internal var path: String
+    private(set) internal var path: String
     
-    private (set) internal var method: HTTPMethod = .GET
+    private(set) internal var method: HTTPMethod = .GET
     
     typealias Response = AsyncThrowingStream<ByteBuffer, Error>
     

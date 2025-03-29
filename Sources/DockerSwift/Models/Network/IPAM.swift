@@ -23,7 +23,7 @@ public struct IPAM: Codable {
     }
     
     public struct IPAMConfig: Codable {
-        public init(subnet: String? = nil, ipRange: String? = nil, gateway: String, auxiliaryAddresses: [String : String]? = [:]) {
+        public init(subnet: String? = nil, ipRange: String? = nil, gateway: String? = nil, auxiliaryAddresses: [String : String]? = [:]) {
             self.subnet = subnet
             self.ipRange = ipRange
             self.gateway = gateway
@@ -32,7 +32,7 @@ public struct IPAM: Codable {
         
         public var subnet: String?
         public var ipRange: String?
-        public var gateway: String
+        public var gateway: String?
         public var auxiliaryAddresses: [String:String]? = [:]
         
         enum CodingKeys: String, CodingKey {

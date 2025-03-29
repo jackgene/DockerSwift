@@ -2,6 +2,14 @@ import Foundation
 
 /// A docker Swarm Config
 public struct Config: Codable {
+    public init(id: String, version: SwarmVersion, createdAt: Date, updatedAt: Date, spec: ConfigSpec) {
+        self.id = id
+        self.version = version
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.spec = spec
+    }
+    
     public let id: String
     
     /// The version number of the object such as node, service, etc.
@@ -12,7 +20,7 @@ public struct Config: Codable {
     
     public let updatedAt: Date
     
-    public let spec: ConfigSpec
+    public var spec: ConfigSpec
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"

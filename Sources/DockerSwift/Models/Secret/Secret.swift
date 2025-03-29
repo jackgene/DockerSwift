@@ -1,6 +1,14 @@
 import Foundation
 
 public struct Secret: Codable {
+    public init(id: String, version: SwarmVersion, createdAt: Date, updatedAt: Date, spec: SecretSpec) {
+        self.id = id
+        self.version = version
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.spec = spec
+    }
+    
     public let id: String
     
     /// The version number of the object such as node, service, etc.
@@ -11,7 +19,7 @@ public struct Secret: Codable {
     
     public let updatedAt: Date
     
-    public let spec: SecretSpec
+    public var spec: SecretSpec
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"

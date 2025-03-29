@@ -43,13 +43,13 @@ public struct Image : Codable {
     public let author: String
     
     /// Hardware CPU architecture that the image runs on.
-    public let architecture: String
+    public let architecture: Architecture
     
     /// CPU architecture variant (presently ARM-only).
     public let variant: String?
     
     /// Operating System the image is built to run on.
-    public let os: String
+    public let os: OsType
     
     /// Operating System version the image is built to run on (especially for Windows).
     public let osVersion: String?

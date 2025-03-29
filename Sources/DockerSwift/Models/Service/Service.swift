@@ -4,6 +4,15 @@ import BetterCodable
 /// Representation of a service.
 /// Some actions can be performed on an instance.
 public struct Service {
+    public init(id: String, createdAt: Date, updatedAt: Date, version: SwarmVersion, spec: ServiceSpec, endpoint: Service.Endpoint) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.version = version
+        self.spec = spec
+        self.endpoint = endpoint
+    }
+    
     public let id: String
     
     @DateValue<WeirdDockerStrategy>
@@ -45,6 +54,12 @@ public struct Service {
     }
     
     public struct Endpoint: Codable {
+        public init(spec: ServiceEndpointSpec? = nil, ports: [ServiceEndpointSpec.EndpointPortConfig]? = nil, virtualIps: [Service.Endpoint.EndpointVirtualIp]? = nil) {
+            self.spec = spec
+            self.ports = ports
+            self.virtualIps = virtualIps
+        }
+        
         /// Properties that can be configured to access and load balance a service.
         public let spec: ServiceEndpointSpec?
         
@@ -58,6 +73,11 @@ public struct Service {
         }
         
         public struct EndpointVirtualIp: Codable {
+            public init(networkId: String, address: String) {
+                self.networkId = networkId
+                self.address = address
+            }
+            
             /// The ID of the Docker Network
             public let networkId: String
             
@@ -72,6 +92,13 @@ public struct Service {
     }
     
     public struct UpdateStatus: Codable {
+        public init(state: Service.UpdateStatus.ServiceUpdateState, startedAt: Date, completedAt: Date, message: String? = nil) {
+            self.state = state
+            self.startedAt = startedAt
+            self.completedAt = completedAt
+            self.message = message
+        }
+        
         public let state: ServiceUpdateState
         public let startedAt: Date
         public let completedAt: Date
@@ -91,6 +118,12 @@ public struct Service {
     }
     
     public struct ServiceStatus: Codable {
+        public init(runningTasks: UInt64, desiredTasks: UInt64, completedTasks: UInt64) {
+            self.runningTasks = runningTasks
+            self.desiredTasks = desiredTasks
+            self.completedTasks = completedTasks
+        }
+        
         /// The number of tasks for the service currently in the Running state.
         public let runningTasks: UInt64
         

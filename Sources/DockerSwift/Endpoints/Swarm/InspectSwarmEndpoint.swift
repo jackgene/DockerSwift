@@ -31,30 +31,44 @@ public struct InspectSwarmEndpoint: Endpoint {
     }
     
     public struct SwarmResponse: Codable {
-        public let id: String
+        public init(id: String, createdAt: String, updatedAt: String, dataPathPort: UInt16, defaultAddrPool: [String], joinTokens: InspectSwarmEndpoint.SwarmJoinTokens, rootRotationInProgress: Bool, spec: SwarmSpec, subnetSize: UInt8, tlsInfo: InspectSwarmEndpoint.SwarmTLSInfo, version: InspectSwarmEndpoint.SwarmResponseVersion) {
+            self.id = id
+            self.createdAt = createdAt
+            self.updatedAt = updatedAt
+            self.dataPathPort = dataPathPort
+            self.defaultAddrPool = defaultAddrPool
+            self.joinTokens = joinTokens
+            self.rootRotationInProgress = rootRotationInProgress
+            self.spec = spec
+            self.subnetSize = subnetSize
+            self.tlsInfo = tlsInfo
+            self.version = version
+        }
         
-        public let createdAt: String
-        public let updatedAt: String
+        public var id: String
+        
+        public var createdAt: String
+        public var updatedAt: String
         
         /// DataPathPort specifies the data path port number for data traffic. Acceptable port range is 1024 to 49151.
         /// If no port is set or is set to 0, the default port (4789) is used.
-        public let dataPathPort: UInt16
+        public var dataPathPort: UInt16
         
-        public let defaultAddrPool: [String]
+        public var defaultAddrPool: [String]
         
-        public let joinTokens: SwarmJoinTokens
+        public var joinTokens: SwarmJoinTokens
         
         /// Whether there is currently a root CA rotation in progress for the swarm
-        public let rootRotationInProgress: Bool
+        public var rootRotationInProgress: Bool
         
-        public let spec: SwarmSpec
+        public var spec: SwarmSpec
         
         /// SubnetSize specifies the subnet size of the networks created from the default subnet pool.
-        public let subnetSize: UInt8
+        public var subnetSize: UInt8
         
-        public let tlsInfo: SwarmTLSInfo
+        public var tlsInfo: SwarmTLSInfo
         
-        public let version: SwarmResponseVersion
+        public var version: SwarmResponseVersion
         
         enum CodingKeys: String, CodingKey {
             case id = "ID"

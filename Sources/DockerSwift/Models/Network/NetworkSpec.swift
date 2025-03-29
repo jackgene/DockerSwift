@@ -45,7 +45,7 @@ public struct NetworkSpec: Codable {
         self.labels = labels
     }
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case name = "Name"
         case checkDuplicate = "CheckDuplicate"
         case driver = "Driver"
@@ -55,6 +55,6 @@ public struct NetworkSpec: Codable {
         case ipam = "IPAM"
         case enableIPv6 = "EnableIPv6"
         case options = "Options"
-        case labels = "Labeels"
+        case labels = "Labels"
     }
 }

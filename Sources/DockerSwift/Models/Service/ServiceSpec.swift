@@ -2,19 +2,18 @@ import Foundation
 
 // MARK: - ServiceSpec
 public struct ServiceSpec: Codable {
-    public init(name: String, labels: [String : String] = [:], taskTemplate: ServiceSpec.TaskTemplate, mode: ServiceSpec.ServiceMode = .replicated(1), updateConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, rollbackConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, networks: [ServiceSpec.NetworkAttachmentConfig]? = nil, endpointSpec: ServiceEndpointSpec? = nil) {
+    public init(name: String, labels: [String : String] = [:], taskTemplate: ServiceSpec.TaskTemplate, mode: ServiceSpec.ServiceMode = .replicated(1), updateConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, rollbackConfig: ServiceSpec.UpdateOrRollbackConfig? = nil, endpointSpec: ServiceEndpointSpec? = nil) {
         self.name = name
         self.labels = labels
         self.taskTemplate = taskTemplate
         self.mode = mode
         self.updateConfig = updateConfig
         self.rollbackConfig = rollbackConfig
-        self.networks = networks
         self.endpointSpec = endpointSpec
     }
     
     /// Name of the service.
-    public var name: String
+    public var name: String?
     
     /// User-defined key/value metadata.
     public var labels: [String:String] = [:]
@@ -29,20 +28,16 @@ public struct ServiceSpec: Codable {
     
     public var rollbackConfig: UpdateOrRollbackConfig?
     
-    /// Configuration for the networks this service belongs to.
-    public var networks: [NetworkAttachmentConfig]?
-    
     /// Configuration for the ports publshed by this service.
     public var endpointSpec: ServiceEndpointSpec?
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case name = "Name"
         case labels = "Labels"
         case taskTemplate = "TaskTemplate"
         case mode = "Mode"
         case updateConfig = "UpdateConfig"
         case rollbackConfig = "RollbackConfig"
-        case networks = "Networks"
         case endpointSpec = "EndpointSpec"
     }
     
@@ -90,7 +85,7 @@ public struct ServiceSpec: Codable {
         /// If not present, the default one for the swarm will be used, finally falling back to the engine default if not specified.
         public var logDriver: DriverConfig?
         
-        enum CodingKeys: String, CodingKey {
+        public enum CodingKeys: String, CodingKey {
             case containerSpec = "ContainerSpec"
             case forceUpdate = "ForceUpdate"
             case runtime = "Runtime"
@@ -114,7 +109,7 @@ public struct ServiceSpec: Codable {
             public var limits: Limit? = nil
             public var reservations: ResourceObject? = nil
             
-            enum CodingKeys: String, CodingKey {
+            public enum CodingKeys: String, CodingKey {
                 case limits = "Limits"
                 case reservations = "Reservations"
             }
@@ -133,7 +128,7 @@ public struct ServiceSpec: Codable {
                 /// Limits the maximum number of PIDs in the container. Set 0 for unlimited.
                 public var pids: UInt64? = 0
                 
-                enum CodingKeys: String, CodingKey {
+                public enum CodingKeys: String, CodingKey {
                     case nanoCPUs = "NanoCPUs"
                     case memoryBytes = "MemoryBytes"
                     case pids = "Pids"
@@ -153,7 +148,7 @@ public struct ServiceSpec: Codable {
                 
                 public var genericResources: [GenericResource]? = []
                 
-                enum CodingKeys: String, CodingKey {
+                public enum CodingKeys: String, CodingKey {
                     case nanoCPUs = "NanoCPUs"
                     case memoryBytes = "MemoryBytes"
                     case genericResources = "GenericResources"
@@ -196,14 +191,16 @@ public struct ServiceSpec: Codable {
         private(set) public var replicatedJob: ReplicatedJob? = nil
         
         /// Run a “one-off” job  globally which means each node in the cluster will run a task for this job
-        private(set) public var GlobalJob: GlobalJob? = nil
+        private(set) public var globalJob: GlobalJob? = nil
         
         /// A service with one task per node that run until reaching a completed state.
-        private(set) public var Global: Global? = nil
+        private(set) public var global: Global? = nil
         
         enum CodingKeys: String, CodingKey {
             case replicated = "Replicated"
             case replicatedJob = "ReplicatedJob"
+            case globalJob = "GlobalJob"
+            case global = "Global"
         }
         
         public struct Replicated: Codable {
@@ -321,7 +318,7 @@ public struct ServiceSpec: Codable {
     
     // MARK: - ContainerSpec
     public struct ContainerSpec: Codable {
-        public init(image: String, isolation: String = "default", labels: [String : String]? = [:], command: [String]? = [], args: [String]? = [], hostname: String? = nil, env: [String]? = [], workDir: String? = nil, user: String? = nil, groups: [String]? = nil, privileges: ServiceSpec.ContainerSpec.Privileges? = nil, tty: Bool? = false, openStdin: Bool? = false, readOnly: Bool? = false, mounts: [ContainerHostConfig.ContainerMount]? = nil, stopSignal: UnixSignal? = .quit, stopGracePeriod: UInt64? = 0, healthCheck: ContainerConfig.HealthCheckConfig? = nil, dnsConfig: ServiceSpec.ContainerSpec.DNSConfig? = .init(), secrets: [ServiceSpec.ContainerSpec.Secret]? = [], configs: [ServiceSpec.ContainerSpec.Config]? = [], init: Bool? = nil, sysctls: [String : String]? = [:], capabilityAdd: [String]? = [], capabilityDrop: [String]? = [], ulimits: [ContainerHostConfig.Ulimit]? = []) {
+        public init(image: String, isolation: String = "default", labels: [String : String]? = [:], command: [String]? = [], args: [String]? = [], hostname: String? = nil, env: [String]? = [], workDir: String? = nil, user: String? = nil, groups: [String]? = nil, privileges: ServiceSpec.ContainerSpec.Privileges? = nil, tty: Bool? = false, openStdin: Bool? = false, readOnly: Bool? = false, mounts: [ContainerHostConfig.ContainerMount]? = nil, stopSignal: UnixSignal? = .quit, stopGracePeriod: UInt64? = 0, healthCheck: ContainerConfig.HealthCheckConfig? = nil, dnsConfig: ServiceSpec.ContainerSpec.DNSConfig? = .init(), secrets: [ServiceSpec.ContainerSpec.Secret]? = [], configs: [ServiceSpec.ContainerSpec.Config]? = [], networks: [NetworkAttachmentConfig]? = [], init: Bool? = nil, sysctls: [String : String]? = [:], capabilityAdd: [String]? = [], capabilityDrop: [String]? = [], ulimits: [ContainerHostConfig.Ulimit]? = []) {
             self.image = image
             self.isolation = isolation
             self.labels = labels
@@ -408,6 +405,8 @@ public struct ServiceSpec: Codable {
         
         public var configs: [Config]? = []
         
+        public var networks: [NetworkAttachmentConfig]? = []
+        
         /// Run an init inside the container that forwards signals and reaps processes.
         /// This field is omitted if empty, and the default (as configured on the daemon) is used.
         public var `init`: Bool? = nil
@@ -428,7 +427,7 @@ public struct ServiceSpec: Codable {
         public var ulimits: [ContainerHostConfig.Ulimit]? = []
         
         
-        enum CodingKeys: String, CodingKey {
+        public enum CodingKeys: String, CodingKey {
             case image = "Image"
             case isolation = "Isolation"
             case labels = "Labels"
@@ -449,6 +448,7 @@ public struct ServiceSpec: Codable {
             case dnsConfig = "DNSConfig"
             case configs = "Configs"
             case secrets = "Secrets"
+            case networks = "Networks"
             case `init` = "Init"
             case sysctls = "Sysctls"
             case capabilityAdd = "CapabilityAdd"
