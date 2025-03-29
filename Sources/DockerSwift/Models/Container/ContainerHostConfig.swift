@@ -128,10 +128,10 @@ public struct ContainerHostConfig: Codable {
     /// Kernel memory limit in bytes.
     /// **Deprecated**: This field is deprecated as the kernel 5.4 deprecated `kmem.limit_in_bytes`.
     @available(*, deprecated)
-    public var kernelMemory: UInt64 = 0
+    public var kernelMemory: UInt64? = 0
     
     /// Hard limit for kernel TCP buffer memory (in bytes).
-    public var kernelMemoryTcp: UInt64 = 0
+    public var kernelMemoryTcp: UInt64? = 0
     
     /// A list of links for the container in the form `container_name:alias`.
     public var links: [String]? = nil
