@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DockerLogEntry: Codable {
+public struct DockerLogEntry: Codable, Sendable {
     public let source: Source
     
     /// Only set if the logs are read with the `timestamp` option set to `true`
@@ -11,7 +11,7 @@ public struct DockerLogEntry: Codable {
     
     public let message: String
     
-    public enum Source: UInt8, Codable {
+    public enum Source: UInt8, Codable, Sendable {
         case stdin = 0
         case stdout = 1
         case stderr = 2
