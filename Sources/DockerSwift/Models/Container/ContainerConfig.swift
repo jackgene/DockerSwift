@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ContainerConfig: Codable {
+public struct ContainerConfig: Codable, Sendable {
     public var attachStdin: Bool = false
     
     public var attachStdout: Bool = true
@@ -125,7 +125,7 @@ public struct ContainerConfig: Codable {
         case workingDir = "WorkingDir"
     }
     
-    public struct HealthCheckConfig: Codable {
+    public struct HealthCheckConfig: Codable, Sendable {
         public init(interval: UInt64, retries: UInt, startPeriod: UInt64, test: [String], timeout: UInt64) {
             self.interval = interval
             self.retries = retries
@@ -164,5 +164,5 @@ public struct ContainerConfig: Codable {
         }
     }
     
-    public struct EmptyObject: Codable {}
+    public struct EmptyObject: Codable, Sendable {}
 }

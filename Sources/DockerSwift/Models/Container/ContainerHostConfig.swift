@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - ContainerHostConfig
-public struct ContainerHostConfig: Codable {
+public struct ContainerHostConfig: Codable, Sendable {
     /// Whether to automatically delete the container when it exits.
     public var autoRemove: Bool = false
     

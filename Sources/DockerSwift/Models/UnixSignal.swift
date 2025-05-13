@@ -1,7 +1,7 @@
 import Foundation
 
 // A Unix signal that can be specified to stop or kill a container.
-public enum UnixSignal: String, Encodable {
+public enum UnixSignal: String, Encodable, Sendable {
     case hup = "SIGHUP"
     case int = "SIGINT"
     

@@ -2,7 +2,7 @@ import Foundation
 
 // This adds some syntaxic sugar over the Docker container Config=>ExposedPorts property, by
 // making it a typed structure, versus the Docker native `"port:protocol": {}` representation
-public struct ExposedPortSpec: Codable, Hashable {
+public struct ExposedPortSpec: Codable, Hashable, Sendable {
     private(set) public var port: UInt16
     private(set) public var `protocol`: PortProtocol
     
@@ -17,7 +17,7 @@ public struct ExposedPortSpec: Codable, Hashable {
         return ExposedPortSpec(port: port, protocol: .sctp)
     }
     
-    public enum PortProtocol: String, Codable {
+    public enum PortProtocol: String, Codable, Sendable {
         case tcp, udp, sctp
     }
     
@@ -30,7 +30,7 @@ public struct ExposedPortSpec: Codable, Hashable {
 }
 
 @propertyWrapper
-public struct ExposedPortCoding: OptionalCodableWrapper {
+public struct ExposedPortCoding: OptionalCodableWrapper, Sendable {
     public var wrappedValue: [ExposedPortSpec]?
     
     public init(wrappedValue: [ExposedPortSpec]?) {
