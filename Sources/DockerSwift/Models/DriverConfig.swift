@@ -1,7 +1,7 @@
 import Foundation
 
 //// Specific the log driver and its options for a Swarm (globally) or for a Service.
-public struct DriverConfig: Codable {
+public struct DriverConfig: Codable, Sendable {
     public init(name: String? = nil, options: [String : String]? = nil) {
         self.name = name
         self.options = options

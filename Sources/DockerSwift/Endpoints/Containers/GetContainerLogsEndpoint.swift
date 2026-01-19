@@ -6,7 +6,7 @@ class GetContainerLogsEndpoint: StreamingEndpoint {
     typealias Body = NoBody
     typealias Response = AsyncThrowingStream<ByteBuffer, Error>
     
-    var method: HTTPMethod = .GET
+    let method: HTTPMethod = .GET
     
     private let containerId: String
     let follow: Bool

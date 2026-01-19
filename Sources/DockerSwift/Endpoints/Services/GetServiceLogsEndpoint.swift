@@ -2,7 +2,7 @@ import NIO
 import NIOHTTP1
 import Foundation
 
-class GetServiceLogsEndpoint: GetContainerLogsEndpoint {
+final class GetServiceLogsEndpoint: GetContainerLogsEndpoint, Sendable {
     typealias Body = NoBody
     typealias Response = AsyncThrowingStream<ByteBuffer, Error>
         

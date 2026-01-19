@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
@@ -25,7 +25,12 @@ let package = Package(
                 .product(name: "AsyncHTTPClient", package: "async-http-client"),
                 .product(name: "WebSocketKit", package: "websocket-kit"),
                 "BetterCodable",
-            ]),
+            ]
+        ),
+        .executableTarget(
+            name: "Main",
+            dependencies: ["DockerSwift"]
+        ),
         .testTarget(
             name: "DockerSwiftTests",
             dependencies: [

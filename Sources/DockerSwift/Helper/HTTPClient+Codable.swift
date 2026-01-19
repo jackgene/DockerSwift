@@ -70,7 +70,7 @@ extension EventLoopFuture where Value == HTTPClient.Response {
         }
     }
     
-    public func mapString<T>(map: @escaping (String) throws -> T) -> EventLoopFuture<T> {
+    public func mapString<T>(map: @Sendable @escaping (String) throws -> T) -> EventLoopFuture<T> {
         flatMapThrowing { (response) -> T in
             try response.checkStatusCode()
             guard let bodyData = response.bodyData else {
@@ -126,7 +126,7 @@ extension HTTPClient.Response {
     
 }
 
-public protocol Decoder {
+public protocol Decoder: Sendable {
     func decode<T>(_ type: T.Type, from: Data) throws -> T where T : Decodable
 }
 

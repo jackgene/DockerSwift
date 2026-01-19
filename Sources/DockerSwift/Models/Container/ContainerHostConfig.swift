@@ -370,7 +370,7 @@ public struct ContainerHostConfig: Codable, Sendable {
     }
     
     // MARK: - BlkioWeight
-    public struct BlkioWeight: Codable {
+    public struct BlkioWeight: Codable, Sendable {
         public var path: String
         public var weight: UInt
         
@@ -386,7 +386,7 @@ public struct ContainerHostConfig: Codable, Sendable {
     }
     
     // MARK: - BlkioRateLimit
-    public struct BlkioRateLimit: Codable {
+    public struct BlkioRateLimit: Codable, Sendable {
         public var path: String
         public var rate: UInt
         
@@ -402,7 +402,7 @@ public struct ContainerHostConfig: Codable, Sendable {
     }
     
     // MARK: - DeviceMapping
-    public struct DeviceMapping: Codable {
+    public struct DeviceMapping: Codable, Sendable {
         public let cgroupPermissions: String
         public let pathInContainer: String
         public let pathOnHost: String
@@ -421,7 +421,7 @@ public struct ContainerHostConfig: Codable, Sendable {
     }
     
     // MARK: - ContainerMount
-    public struct ContainerMount: Codable {
+    public struct ContainerMount: Codable, Sendable {
         /// The type of mount point
         public var `type`: Container.ContainerMountType
         
@@ -474,7 +474,7 @@ public struct ContainerHostConfig: Codable, Sendable {
         }
         
         /// Consistency option for bind-mounts.
-        public enum MountConsistency: String, Codable {
+        public enum MountConsistency: String, Codable, Sendable {
             /// The host's view of the mount is authoritative. There may be delays before updates made on the host are visible within a container.
             case cached
             
@@ -488,7 +488,7 @@ public struct ContainerHostConfig: Codable, Sendable {
             case delegated
         }
         
-        public struct BindOptions: Codable {
+        public struct BindOptions: Codable, Sendable {
             public var propagation: BindOptionsPropagation = .rprivate
             public var nonRecursive: Bool = false
             
@@ -502,7 +502,7 @@ public struct ContainerHostConfig: Codable, Sendable {
                 self.nonRecursive = nonRecursive
             }
             
-            public enum BindOptionsPropagation: String, Codable {
+            public enum BindOptionsPropagation: String, Codable, Sendable {
                 /// The mount is private.
                 /// Sub-mounts within it are not exposed to replica mounts, and sub-mounts of replica mounts are not exposed to the original mount.
                 case `private`
@@ -525,7 +525,7 @@ public struct ContainerHostConfig: Codable, Sendable {
             }
         }
         
-        public struct VolumeOptions: Codable {
+        public struct VolumeOptions: Codable, Sendable {
             public init(noCopy: Bool = false, labels: [String : String] = [:], driverConfig: DriverConfig? = nil) {
                 self.noCopy = noCopy
                 self.labels = labels
@@ -543,7 +543,7 @@ public struct ContainerHostConfig: Codable, Sendable {
             }
         }
         
-        public struct TmpfsOptions: Codable {
+        public struct TmpfsOptions: Codable, Sendable {
             public init(sizeBytes: UInt64, mode: UInt32 = 0o1777) {
                 self.sizeBytes = sizeBytes
                 self.mode = mode
@@ -585,13 +585,13 @@ public struct ContainerHostConfig: Codable, Sendable {
         }
         
         public func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: Self.CodingKeys)
+            var container = encoder.container(keyedBy: Self.CodingKeys.self)
             try container.encode("\(self.hostPort)", forKey: .hostPort)
             try container.encode(self.hostIp, forKey: .hostIp)
         }
         
         public init(from decoder: Swift.Decoder) throws {
-            let container = try decoder.container(keyedBy: Self.CodingKeys)
+            let container = try decoder.container(keyedBy: Self.CodingKeys.self)
             self.hostIp = try container.decode(String.self, forKey: .hostIp)
             let portString = try? container.decode(String.self, forKey: .hostPort)
             guard let port = UInt16(portString ?? "") else {
@@ -605,7 +605,7 @@ public struct ContainerHostConfig: Codable, Sendable {
     }
     
     // MARK: - RestartPolicy
-    public struct RestartPolicy: Codable {
+    public struct RestartPolicy: Codable, Sendable {
         
     }
     

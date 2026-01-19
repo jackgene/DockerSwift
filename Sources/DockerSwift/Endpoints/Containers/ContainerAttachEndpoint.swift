@@ -1,14 +1,15 @@
+import Atomics
 import NIO
 import NIOHTTP1
 import WebSocketKit
 import Foundation
 
 /// Attach to a container via Websocket
-final class ContainerAttachEndpoint {
+final class ContainerAttachEndpoint: Sendable {
     typealias Body = NoBody
     typealias Response = ContainerAttach
     
-    private var method: HTTPMethod = .GET
+    private let method: HTTPMethod = .GET
     private var path: String {
         "containers/\(nameOrId)/attach/ws"
     }
@@ -21,7 +22,7 @@ final class ContainerAttachEndpoint {
     /*private let stdin: Bool = true
     private let stdout: Bool
     private let stderr: Bool*/
-    private var ws: WebSocket?
+    private let ws: ManagedAtomicLazyReference<WebSocket> = ManagedAtomicLazyReference()
 
     private var query: String {
         """
@@ -80,7 +81,7 @@ final class ContainerAttachEndpoint {
                     on: self.dockerClient.client.eventLoopGroup
                 ) { ws async in
                     
-                    self.ws = ws
+                    _ = self.ws.storeIfNilThenLoad(ws)
                     ws.onBinary { ws, buffer in
                         guard let rawData = String(data: Data(buffer: buffer), encoding: .utf8) else {
                             continuation.finish(throwing: DockerError.corruptedData("Could not decode Attach output as String"))
@@ -95,7 +96,7 @@ final class ContainerAttachEndpoint {
     }
     
     func send(_ text: String) async throws {
-        guard let ws = self.ws else {
+        guard let ws = self.ws.load() else {
             throw DockerError.notconnected
         }
         guard !ws.isClosed else {
